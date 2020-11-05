@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista wydatków</title>
+    <style>
+        table, th, tr, td {border: 1px solid black;}
+    </style>
+</head>
+
+<h2>Lista wydatków</h2>
+
+<table>
+    <thead>
+    <th>Tytuł</th>
+    <th>Opis</th>
+    <th>Koszt</th>
+    </thead>
+{% for expense in expenses %}
+    <tr>
+        <td><a href="/api/v1/expenses/{{ loop.index }}/">{{ expense.title }}</a></td>
+        <td>{{ expense.description }}</td>
+        <td>{{ expense.amount }}</td>
+    </tr>
+{% endfor %}
+</table>
+<p></p>
+<table>
+    <tr>
+        <td>Całkowite wydatki: </td>
+        <td>{{ total }}</td>
+    </tr>
+</table>
+<div>
+    <h2> Dodaj nowy wydatek: </h2>
+    <form method="POST" action="/api/v1/expenses/">
+        {{ form.hidden_tag() }}
+        <table>
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <tr>
+                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p></p>
+        <input type="submit" value="Add">
+    </form>
+</div>
+<p>* Field required</p>
+</body>
+</html>

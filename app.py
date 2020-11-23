@@ -19,7 +19,7 @@ def expenses_list_api_v1():
     total = expenses.total()
     expenses.sort()
     if request.method == "GET":
-        return render_template("expenses.html", form=form, expenses=expenses.all(), error=error, total=total)
+        return render_template("expenses.html", form=form, expenses=expenses.get_all(), error=error, total=total)
 
 @app.route("/api/v1/expenses/<int:expense_id>", methods=["GET"])
 def get_expense(expense_id):
@@ -46,14 +46,14 @@ def create_expense():
     if request.method == "POST":
         if form.validate_on_submit():
             expense = {
-                'id': expenses.all()[-1]['id'] + 1,
+                'id': expenses.get_all()[-1]['id'] + 1,
                 'title': form.title.data,
                 'description': form.description.data,
                 'amount': form.amount.data
             }
             expenses.create(expense)
         return redirect(url_for("expenses_list_api_v1"))
-    return render_template("expenses.html", form=form, expenses=expenses.all(), error=error, total=total)
+    return render_template("expenses.html", form=form, expenses=expenses.get_all(), error=error, total=total)
 
 #DELETE method not working from what I understand forms only accepte POST or GET
 # @app.route("/api/v1/expenses/<int:expense_id>/", methods=["POST"])
